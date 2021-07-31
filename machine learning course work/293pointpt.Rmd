@@ -1,0 +1,416 @@
+---
+title: "Multivariable Modelling of Time-Varying Effects in Survival Data Based on Fractional Polynomial Time-Transformation "
+author: "Julia Lee"
+date: "2/09/2021"
+output:
+  ioslides_presentation:
+    smaller: yes
+    font_adjustment: -5
+    beamer_presentation: default
+  
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(mice)
+```
+
+
+## Background about the article
+
+
+
+- Article was published in the Biometrical Journal in 2007.
+Biometrical Journal covers statistical methods and their applications in life sciences including medicine, environmental sciences and agriculture. 
+
+- Willi Sauerbrei 
+  - German Statistician 
+  - affiliated with Institute of Medical Biometry and Medical Informatics, University Hospital of Freiburg in Freiburg, Germany. 
+  - Sauerbrei is the corresponding author for this paper. 
+
+- Patrick Royston 
+  - joined the MRC Clinical Trials Unit in 2000
+  - previously a professor in the Department of Statistics and Evaluation, Imperial College, London, UK.  
+  - Research Areas:  Cancer and Methodology
+
+- Maxime Look 
+  - cancer researcher at Josephine Nefkens Institute in the Netherlands 
+
+
+![](https://onlinelibrary.wiley.com/cover/15214036, height=6, width=6)
+
+
+## Abstract
+
+- The Cox proportional hazards model is often used for  analysis of survival time data in cancer. 
+
+-  Proportional hazards (PH) are assumed. "With long-term follow-up, the PH assumption may be violated."
+
+
+- Goal: The authors of the paper aim to account for these non-PH effects.
+  - introduces the method, MFPT, an extension of the multivariable fractional polynomial (MFP) approach
+     -  select influential variables. 
+     -  determine  dose-response function for continuous variables.
+     -  investigate time-varying effects.
+     -  model such time-varying effects on a continuous scale.
+
+## Key Words 
+- Linear regression form:
+  - $$y_i = b_0 + b_ix_i + b_2y_i+ b_2y_i^{2} + \epsilon_i$$
+- $\textbf{Fractional polynomials:}$
+  - an alternative to regular polynomials
+  - provide  more flexible parameterization
+  - $$y_i = b_0 + b_ix_i + b_2w_i^{p_1}+ b_3w_i^{p_2} + \epsilon_i$$
+  - Fractional powers, $p_i$ are different from regular powers. 
+  - For instance, $y^{p_1=0}$ is $ln(y)$
+- $\textbf{proportional hazards:}$
+  - exponential, Weibull, and Cox models are all proportional hazards (PH) models.
+  - these models shift the hazard proportionally to the baseline
+  - $$h_{A}(t) = Ch_{b}(t)$$
+  - where C is the hazard ratio between B and A
+
+## Key Words (cont.)
+- $\textbf{The semiparametric proportional hazards model of Cox (1972):}$
+  - developed by British statistician David Cox in 1972
+  - popular model used in analysis of survival data
+  - Goal: link the survival time of an individual to covariates
+  - $$h(t) = h_0(t)+ exp(b_0 + b_1x_1 + b_2x_2+ b_3x_3 +....+ b_px_p)$$
+    - t = the survival time
+    - h(t) - the hazard function determined by a set of p covariates (x_1,x_2,x_3,...,x_p)
+  - Key assumptions: 
+    - the proportional hazards function assumption
+       - $\textbf{ each covariate's  multiplicative effect is constant over time.}$ 
+
+## Introduction
+- Most cancer studies and other medical studies use the the Cox semi-parametric proportional hazards model for survival time data analysis 
+- proportional hazards (PH) are assumed for covariate effects, 
+    - implying that the effect on the hazard function is constant throughout the whole study.
+- problem: 
+    - long-term follow-up studies show  that  the assumption of constant multiplicative effect for covariates becomes questionable.
+    - Tumor size tend to strongly influence the short term prognosis 
+    - The effect changes over time (decreasing)
+
+The authors in the article propose procedure called $\textit{MFPT (multivariable fractional polynomial- time)}$: 
+
+  - select influential variables  
+  - determine dose-response functions for continuous variables
+  - Whether there are time-varying effects 
+  - Better model time-varying effects 
+
+
+## past proposed solutions:
+  - the baseline cumulative hazard function.
+  - a step-function model 
+  - relaxing the PH assumption and using  an interaction between a covariate and time.
+  - fractional polynomials
+  - estimating local time-varying coefficients
+  
+  The authors of the paper argue that it is unclear how useful these proposed methods are. 
+  
+  - In the article the authors perform MFPT on breast cancer data to compare differences from the previously considered methods. 
+ 
+# Methods 
+ 
+## Considerations
+- Even if other variables don't change over time they might be effected by non-PH effects 
+- Examining the PH assumption requires long term follow up.
+
+- There have been solution for incorporating time-varying effects but there is no way to specify time-varying functions.  
+
+- There are many tests to check the PH assumption 
+
+
+ 
+## Multivariable FP:
+
+ - Cox’s suggestion for incorporating time-varyng effects
+ 
+ - Hazard function at time t>0 (usual 
+ assumption of proportional hazards): 
+ $$h(t|X) = h_0(t)exp[X'\beta]$$
+ 
+ - To build a model, the authors use the MFP algorithm (Sauerbrei and Royston, 1999)
+- The algorithm uses backward elimination 
+
+It proceeds cyclically.
+
+-  functional form determined univariately
+
+- Convergence when  there are no further changes 
+  - this is when FP transformation takes place
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+## Cox’s suggestion for incorporating time-varying effects.
+
+- Cox in 1972 proposed a way to extend his model for non-proportional hazard effects:
+$$h(t|X) = h_0(t)exp[X'\beta (t)]$$
+
+Then this relative hazard becomes the function of X and t:
+$$\frac{h(t|X)}{h_0(t)} = exp[X'\beta]$$
+
+For a single variable Cox proposed using an unspecified function $\psi(t)$
+
+
+$$h(t|X) = {h_0(t)}exp[\beta_0X + \beta_1\psi(t)X]$$
+
+Where $\psi(t)X$ is a multiplicative interaction term that extends the orginial hazard function at time t > 0 . 
+
+
+$\psi(t)X$ is hard to specify 
+ 
+- Different choices of $\psi(t)X$ affect the analysis of possible time-varying effects
+
+
+## $\psi(t)$ 
+- The authors propose a method for  estimating $\psi(t)$ as an FP function of t
+
+$$y_i = b_0 + b_ix_i + b_2w_i^{\psi(t)}+ b_3w_i^{\psi(t)} + \epsilon_i$$
+
+- as a default $\psi(t)= log(t)$ 
+
+- the authors choose a better $\psi(t)$ if indicated by the data. 
+
+- The extension to multivariate fuction of time is done by stepwise selection
+
+
+
+
+
+
+
+
+# New Proposal
+
+## Stage 1  
+
+
+select model $M_0$ using MFP algorithm using PH
+
+$M_0$ is the model intially selected by $MFP$
+, with time-fixed effects only.
+
+
+the effect of at least one variable of interest varies in time, model M0 either mismodels its relative hazard as constant in time
+
+
+
+  - PH assumption the estimated ‘average’ effect over the full time period could be  small.
+  
+  - more intial important variables could strongly increase the risk of an event near the beginning but then diminish over time.
+  - check whether the variables is not included in $M_0$ is transient or short term effect. 
+  
+
+  
+  
+
+## Stage 2
+
+
+1.) Start with the model $M_0$ 
+
+
+censor all events when one half of all events have been observed. This is the defintion of short-term. 
+
+2.) restrict the time period to $(0,\hat t)$ where $\hat t$ is the first half of events 
+
+
+3.) 
+re-apply MFP 
+    
+   - allow for  variables not selected in full time period 
+  - Variables and FP selected in stage 1
+      - regression coefficients are
+      re-estimated
+      - The FP functions (powers) kept fixed when studying time-varying effects.
+
+This gives $M_1$
+
+## FPT:
+extend Cox’s basic approach for modelling a time-varying effect of a given covariate $X$
+
+An FP1 function (or model) is defined as $$\psi_1(x;p) =  \beta_0 + \beta_1x^p$$
+
+ 
+FP2 transformation of x with  $p = (p_1,p_2)$
+is the vector $x^p$ with 
+
+$$x^p = x ^{(p_1,p_2)} = \bigg\{(x^{p_1},x^{p_2}) \ p_1 
+\neq p_2 \ \\
+\  \ (x^{p_1},x^{p_2}, logx) \ p_1 
+= p_2= p$$
+
+$\beta = (\beta_1, \beta_2)$ and powers $p$ 
+$$\psi_2(x;p) =  \beta_0 + x^p\beta$$
+
+
+## 
+
+
+time-varying Cox model based on untransformed X and an FP2 function of t with powers P = (q_1;q_2):
+
+
+$$h(t|X) =h_0(t)exp[X_{\psi_2}(t; q)] =$$
+
+$$= {h_0(t)}exp[X(\beta_0 + \beta_1t^{q_1}+\beta_2t^{q_2})] \, where \  q_1 \neq q_2 $$
+$$= {h_0(t)}exp[X(\beta_0 + \beta_1t^{q_1}+\beta_2t^{q_2}log(t))] \, where\ q_1 = q_2 $$ 
+
+
+compare deviance  difference of the models $\psi_j(t)$ and $\psi_k(t)$ where $j < k$ with 
+$\chi_c^2$ valvues  $c= df$
+
+ for example the deviance difference between $\psi_1(t)$ and $\psi_2(t)$ is compared with $\chi_2^2$. 
+ 
+![](l.png){#id .class width=60% height=60%} 
+
+If this test is significant, the more complex FP2 function $\psi_2(t)$  is chosen, otherwise the simpler FP1 function $\psi_1(t)$
+
+
+
+
+
+## Stage 3:
+
+1) For each covariate with the slected FP  of $M_1$ run the FPT algorithm. 
+
+check for time varying effects. 
+
+2) Use foward selection to select variables that give significant time varying effects to $M_1$. 
+
+3) new model is $M_2$. 
+
+
+  
+# data 
+
+## Cases
+
+-  3001 patients from the Rotterdam breast cancer series:
+  - primary breast cancer treatment 1973-1993
+- excluding cases with missing information, $n = 2982$ for analysis. 
+  -  missing information about the number of positive nodes (n = 11) 
+  -  adjuvant treatment of node negative patients (n = 8)
+
+## Variables 
+![](data.png){#id .class width=75% height=75%}
+
+## missing data:
+
+- The variable Tumor grade was missing for 27% of the data. 
+
+- The authors use MICE method of multivariate multiple imputation to account the missing values. 
+
+- Missing data imputation is the idea  subsituting data for missing values. 
+
+- Multiple imputation takes into account uncertainty in missing value imputation.
+
+- The authors use the Stata program mvis (Royston, 2004) 
+
+- We can do this in r with the mice package and the function mice()
+
+
+![](code.png){#id .class width=60% height=60%}
+
+
+
+
+
+
+
+
+
+# Results 
+
+
+
+## Time-varying effects in final model
+
+Regression parameter estimates are given in Table 4. 
+
+- Estimates of parameters of models 
+  - M0 (stage 1) 
+  - M1 (stage 2) 
+  - M2 (stage 3). 
+
+![](table 4.png){#id .class width=40% height=40%}
+
+- These two variables, $X_3b$ and $X6$ are added to the variables in $M_0$  gives model $M_1$. 
+
+
+
+
+
+
+
+## result of model
+
+
+- The MFPT algorithm to extend Cox model M1 with time-varying functions. 
+
+- For each variable powers of the best FP1 and FP2 functions 
+
+
+
+![](results steps.png){#id .class width=60% height=60%}
+
+- P-values of tests to assess a time-varying effect. 
+- log X6 and log X3a at the second step. 
+
+
+
+
+
+
+## Time-varying effects in final model
+- the two variables $X3a$ and $log X6$ . 
+
+
+![](event free survival.png){#id .class width=60% height=60%}
+
+- the effect of the prognostic index diminishes in time.
+
+
+## Sensitivity Analysis MFPT model
+- Backwards elimination and foward selection.
+- stage 3 of the MFPT algorithm for model M1
+
+![](table 6.png){#id .class width=60% height=60%}
+
+- at 5% significance level both selction methods give the same model.
+
+
+
+
+
+
+
+
+## Type I error
+- check type I error probability of FTP for a single binary
+covariate. 
+![](table 7.png){#id .class width=60% height=60%}
+-  X assigned to a time fixed hazard ratio of either 0.75 or 1.0
+- 1000 simulations distributed time to event data without censoring. 
+  - count the number of times we reject null hypothesis with no time varying effect. 
+  
+
+## conclusion
+
+- Time-varying issues are more important for long term follow ups. 
+
+- MFPT procedure handles the key stages of a model-building procedure for such problems. 
+
+- MFPT is flexible enough to incorporate information. 
+
+- Further investigatons into:  type I and type II error  at all 3 stages.
+
+
+
+
